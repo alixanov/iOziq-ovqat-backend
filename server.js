@@ -14,5 +14,5 @@ app.use(express.urlencoded({ extended: false }))
 app.use("/api", itemRoutes)
 
 
-const PORT = process.env.PORT || 3006
+const PORT = process.env.PORT || 3006 
 app.listen(PORT, () => console.log(`Сервернинг запущен на порту ${PORT}`))

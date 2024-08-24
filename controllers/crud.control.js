@@ -58,15 +58,43 @@ const updateProduct = async (req, res) => {
 
 const sellProduct = async (req, res) => {
      try {
-          const { nomi, kelgannarxi, sotishnarxi, soni, barcode } = req.body;
+          const { items, total, saleDate } = req.body;
 
-          // Создание нового документа в коллекции SoldProduct
-          const newSoldProduct = new SoldProduct({ nomi, kelgannarxi, sotishnarxi, soni, barcode });
-          await newSoldProduct.save();
+          const soldProducts = [];
 
-          res.status(201).json(newSoldProduct);
+          for (let i = 0; i < items.length; i++) {
+               const { _id, nomi, kelgannarxi, sotishnarxi, quantity } = items[i];
+
+               // Найти продукт по _id и обновить количество
+               const product = await Product.findById(_id);
+               if (!product) {
+                    return res.status(404).json({ message: `Товар с id ${_id} не найден` });
+               }
+
+               if (product.soni < quantity) {
+                    return res.status(400).json({ message: `Недостаточное количество товара ${nomi} на складе` });
+               }
+
+               product.soni -= quantity;
+               await product.save();
+
+               // Сохранить информацию о проданном товаре
+               const newSoldProduct = new SoldProduct({
+                    nomi,
+                    kelgannarxi,
+                    sotishnarxi,
+                    soni: quantity,
+                    barcode: product.barcode,
+                    saleDate,
+               });
+               await newSoldProduct.save();
+
+               soldProducts.push(newSoldProduct);
+          }
+
+          res.status(201).json({ message: 'Продажа успешно завершена', soldProducts, total });
      } catch (error) {
-          res.status(500).json({ message: "Ошибка при сохранении проданного товара", error });
+          res.status(500).json({ message: "Ошибка при завершении продажи", error });
      }
 };
 
