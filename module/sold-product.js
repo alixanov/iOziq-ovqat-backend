@@ -1,5 +1,3 @@
-const { Schema, model } = require("mongoose");
-
 const SoldProductSchema = new Schema({
      nomi: {
           type: String,
