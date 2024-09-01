@@ -120,6 +120,17 @@ const sellProduct = async (req, res) => {
                return res.status(401).json({ message: 'Token yaroqsiz' });
           }
      };
+const getSoldItems = async (req, res) => {
+     try {
+          const soldItems = await SoldProduct.find();
+          res.status(200).json(soldItems);
+     } catch (error) {
+          res.status(500).json({ message: "Ошибка при получении проданных товаров", error });
+     }
+};
+
+module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct, sellProduct, getSoldItems, loginAdmin, checkToken };
 
 
-module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct, sellProduct, loginAdmin, checkToken };
+
+// module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct, sellProduct, loginAdmin, checkToken };
