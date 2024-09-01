@@ -122,4 +122,4 @@ const sellProduct = async (req, res) => {
      };
 
 
-     module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct, sellProduct, getSoldItems, loginAdmin, checkToken }
+module.exports = { addProduct, getAllProduct, deleteProduct, updateProduct, sellProduct, loginAdmin, checkToken };
